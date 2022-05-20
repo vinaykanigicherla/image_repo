@@ -1,15 +1,15 @@
 import streamlit as st
 import argparse
 
-import add_delete_images
-import search
+import add_delete_sections
+import search_sections
 
 from PIL import Image 
 
 
 
 def main():
-
+    """Main code for building Streamlit app"""
     parser = argparse.ArgumentParser()
     parser.add_argument("--num_uploads_allowed", type=int, default=8, 
                         help="No. image uploads allowed at once per user")
@@ -33,13 +33,14 @@ def main():
     page = st.sidebar.selectbox("What do you want to do?", options=["View", "Add", "Search"])
 
     if page == "View":
-        add_delete_images.display_images_section()
-        add_delete_images.delete_all_section()
+        add_delete_sections.display_images_section()
+        add_delete_sections.delete_all_section()
     if page == "Add":
-        add_delete_images.file_uploader_section(NUM_UPLOADS_ALLOWED, IMG_PREVIEW_HEIGHT)
+        add_delete_sections.file_uploader_section(NUM_UPLOADS_ALLOWED, IMG_PREVIEW_HEIGHT)
     if page == "Search":
-        retrieved_filename = search.text_search()
-        add_delete_images.delete_image_section(retrieved_filename)
+        retrieved_filename = search_sections.text_search()
+        add_delete_sections.delete_image_section(retrieved_filename)
+        search_sections.image_search()
     
 
 if __name__ == "__main__":
