@@ -14,7 +14,7 @@ A simple image repository capabale of storing and searching over images. The app
 
 All files are stored using AWS S3 and interface is built using Streamlit. 
 
-### Running Locally with Docker
+### Running Locally
 To run the app using Docker, do:
 ``` 
 $ docker build -t your_docker_image_name:latest .
