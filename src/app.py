@@ -1,8 +1,8 @@
 import streamlit as st
 import argparse
 
-import add_delete_sections
-import search_sections
+from frontend import add_delete_sections
+from frontend import search_sections
 
 from PIL import Image 
 

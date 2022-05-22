@@ -3,15 +3,12 @@ import json
 import boto3 
 import numpy as np
 
-import image_search
+from . import image_search
 
 from io import BytesIO
 from PIL import Image 
 from botocore.errorfactory import ClientError
 from typing import Dict, List
-
-from utils import is_image_file
-
 
 s3 = boto3.client('s3',
                 region_name = st.secrets["aws_region_name"],

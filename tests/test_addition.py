@@ -1,5 +1,5 @@
-from src import storage
-from tests.utils import load_image, clean 
+from src.backend import storage
+from utils import load_image, clean 
 
 
 @clean
@@ -21,7 +21,7 @@ def test_image_vector_exists():
     
 @clean 
 def test_multiple_images():
-    fns = ["dog1", "tiger1", "zebra1", "dog2", "tiger2", "zebra2"]
+    fns = ["dog1", "duck1", "zebra1", "dog2", "duck2", "zebra2"]
     image_keys = [fn+".jpg" for fn in fns]
     vector_keys = [fn+".npy" for fn in fns]
     imgs = [load_image(ik) for ik in image_keys]

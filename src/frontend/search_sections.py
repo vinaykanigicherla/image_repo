@@ -1,7 +1,7 @@
 import streamlit as st
-import storage
+from backend import storage
 from PIL import Image
-from utils import image_gallery, resize_img_to_height, resize_img_to_width
+from backend.utils import image_gallery, resize_img_to_height, resize_img_to_width
 
 
 def text_search() -> str:

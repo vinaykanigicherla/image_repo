@@ -1,14 +1,14 @@
-from PIL import Image 
-from os.path import join 
-from src.storage import delete_all_images
+import os 
+from PIL import Image  
+from src.backend import storage
 
 def load_image(filename: str) -> Image.Image:
-    path = join("test_images", filename)
+    path = os.path.join("tests", "test_images", filename)
     img = Image.open(path)
     return img 
 
 def _clean():
-    failed_deletions = delete_all_images()
+    failed_deletions = storage.delete_all_images()
     assert failed_deletions == []
     
 def clean(func):

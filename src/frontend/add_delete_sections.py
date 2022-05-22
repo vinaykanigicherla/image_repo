@@ -1,10 +1,10 @@
 import streamlit as st
 
-import storage
+from backend import storage
 
 from PIL import Image
 
-from utils import resize_img_to_height, image_gallery
+from backend.utils import resize_img_to_height, image_gallery
 
 def file_uploader_section(num_uploads_allowed: int, img_display_height: int):
     """Section to upload images and add to repository"""
