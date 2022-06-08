@@ -22,7 +22,7 @@ def text_search() -> str:
 
 def image_search() -> str:
     """Section to see images in the repository that are similar to an uploaded image"""
-    st.markdown("## Image Search")
+    st.markdown("## Reverse Image Search")
     
     upload = st.file_uploader("Upload Image to search for similar images in repository:", type = ["png", "jpg"])
     
@@ -36,5 +36,18 @@ def image_search() -> str:
         with st.spinner():
             image_gallery(storage.get_similar_imgs(img, num_similar))
 
+
+def semantic_search() -> str:
+    """Section to see images in the repository that are similar to a query text"""
+    st.markdown("## Semantic Search")
+    
+    text = st.text_input("Enter query text:")
+    
+    
+    num_similar = st.number_input("How many of the relevant images do you want to see?", min_value=0, max_value=20)
+    
+    if text and num_similar > 0:
+        with st.spinner():
+            image_gallery(storage.get_similar_imgs_text(text, num_similar))
 
 

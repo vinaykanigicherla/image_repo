@@ -41,6 +41,7 @@ def main():
         retrieved_filename = search_sections.text_search()
         add_delete_sections.delete_image_section(retrieved_filename)
         search_sections.image_search()
+        search_sections.semantic_search()
     
 
 if __name__ == "__main__":

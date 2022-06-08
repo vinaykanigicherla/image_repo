@@ -1,23 +1,28 @@
 import streamlit as st 
 import numpy as np
 
-from tensorflow.keras.applications.resnet50 import ResNet50
+from transformers import CLIPProcessor, CLIPModel
 from PIL import Image 
 from typing import Dict
+
+
+model = CLIPModel.from_pretrained("src/res/clip-vit-base-patch32").to("cpu")
+processor = CLIPProcessor.from_pretrained("src/res/clip-vit-base-patch32")
+
 
 def cosine_similarity(a: np.ndarray, b: np.ndarray) -> float:
     """Compute similarity between vector a and b"""
     return float(np.dot(a, b.T)/(np.linalg.norm(a)*np.linalg.norm(b)))
 
-def load_vectorization_model():
-    """Load ResNet50 model with Imagenet weights for vectorizing images"""
-    return ResNet50(include_top=False, weights="src/res/resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5", pooling="avg")
+def vectorize_img(img: Image.Image) -> np.ndarray:
+    """Vectorize img using CLIP model"""
+    inputs = processor(text=None, images=img, return_tensors="pt", padding=True)
+    return model.get_image_features(**inputs).detach().numpy()
 
-def vectorize(img: Image.Image, model) -> np.ndarray:
-    """Vectorize img using ResNet50 model"""
-    img = img.resize((224,224))
-    np_arr = np.array(img).reshape(1, 224, 224, 3)
-    return model.predict(np_arr)
+def vectorize_text(text: str) -> np.ndarray:
+    """Vectorize img using CLIP model"""
+    inputs = processor(text=[text], images=None, return_tensors="pt", padding=True)
+    return model.get_text_features(**inputs).detach().numpy()
 
 def find_similarities(filename_to_vector: Dict[str, np.ndarray], target: np.ndarray) -> Dict[str, float]:
     """Find similarity between target vector and image vector associated with each filename"""

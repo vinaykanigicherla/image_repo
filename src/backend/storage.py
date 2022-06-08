@@ -15,9 +15,6 @@ s3 = boto3.client('s3',
                 aws_access_key_id = st.secrets["aws_access_key_id"],
                 aws_secret_access_key = st.secrets["aws_secret_access_key"])
 
-model = image_search.load_vectorization_model()
-
-
 def exists(filename: str) -> bool:
     """Check if object with key filename exists in s3"""
     try:
@@ -105,7 +102,7 @@ def put_image(img: Image.Image, filename: str) -> bool:
     in_mem_file.seek(0)
 
     in_mem_file_vec = BytesIO()
-    np.save(in_mem_file_vec, image_search.vectorize(img, model))
+    np.save(in_mem_file_vec, image_search.vectorize_img(img))
     in_mem_file_vec.seek(0)
 
     try:
@@ -128,8 +125,7 @@ def put_images(imgs: List[Image.Image], filenames: List[str]) -> List[str]:
 
 def get_similar_imgs(img: Image.Image, n: int) -> List[Image.Image]:
     """Get n most similar images to img from s3"""
-    model = image_search.load_vectorization_model()
-    target_vector = image_search.vectorize(img, model)
+    target_vector = image_search.vectorize_img(img)
     
     filenames = [f["Key"] for f in get_all_image_objects()]
 
@@ -138,7 +134,18 @@ def get_similar_imgs(img: Image.Image, n: int) -> List[Image.Image]:
     filenames.sort(key=lambda fn: filename_to_sim[fn], reverse=True)
 
     return {fn: get_image(fn) for fn in filenames[:n]}
+
+def get_similar_imgs_text(text: str, n: int) -> List[Image.Image]:
+    """Get n most similar images to img from s3"""
+    target_vector = image_search.vectorize_text(text)
     
+    filenames = [f["Key"] for f in get_all_image_objects()]
+
+    filename_to_vector = {fn: get_image_vector(fn) for fn in filenames}
+    filename_to_sim = image_search.find_similarities(filename_to_vector, target_vector)
+    filenames.sort(key=lambda fn: filename_to_sim[fn], reverse=True)
+
+    return {fn: get_image(fn) for fn in filenames[:n]}
 
 
 
